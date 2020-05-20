@@ -1,34 +1,26 @@
 """This module contains the packaging routine for the pybook package"""
-
+import sys
+import pip
 from setuptools import setup, find_packages
+
 try:
-    from pip.download import PipSession
-    from pip.req import parse_requirements
-except ImportError:
-    # It is quick hack to support pip 10 that has changed its internal
-    # structure of the modules.
-    from pip._internal.download import PipSession
-    from pip._internal.req.req_file import parse_requirements
+    if pip.__version__ >= "19.3":
+        from pip._internal.req import parse_requirements
+        from pip._internal.network.session import PipSession
+    elif pip.__version__ >= "10.0" and pip.__version__ < "19.3":
+        from pip._internal.req import parse_requirements
+        from pip._internal.download import PipSession
+    else:  # pip < 10 is not supported
+        raise Exception('Please upgrade pip: pip install --upgrade pip')
+except ImportError as err:  # for future changes in pip
+    print('New breaking changes in pip!!', err)
+    sys.exit()
 
-
-def get_requirements(source):
-    """Get the requirements from the given ``source``
-
-    Parameters
-    ----------
-    source: str
-        The filename containing the requirements
-
-    """
-
-    install_reqs = parse_requirements(filename=source, session=PipSession())
-
-    return [str(ir.req) for ir in install_reqs]
+# TOOD
+# install_requirements = [str(ir.req) for ir in parse_requirements('requirements/requirements.txt', session=PipSession())]
 
 
 setup(
     packages=find_packages(),
-    install_requires=get_requirements('requirements/requirements.txt')
+    # install_requires=install_requirements,
 )
-
-

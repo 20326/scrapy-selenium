@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """This module contains the ``SeleniumRequest`` class"""
 
 from scrapy import Request

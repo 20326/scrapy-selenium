@@ -1,11 +1,12 @@
 # Scrapy with selenium
 [![PyPI](https://img.shields.io/pypi/v/scrapy-selenium.svg)](https://pypi.python.org/pypi/scrapy-selenium) [![Build Status](https://travis-ci.org/clemfromspace/scrapy-selenium.svg?branch=master)](https://travis-ci.org/clemfromspace/scrapy-selenium) [![Test Coverage](https://api.codeclimate.com/v1/badges/5c737098dc38a835ff96/test_coverage)](https://codeclimate.com/github/clemfromspace/scrapy-selenium/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/5c737098dc38a835ff96/maintainability)](https://codeclimate.com/github/clemfromspace/scrapy-selenium/maintainability)
 
-Scrapy middleware to handle javascript pages using selenium.
+Scrapy middleware to handle javascript pages using selenium With Selenium-Wire
 
 ## Installation
 ```
-$ pip install scrapy-selenium
+$ pip install selenium-wire
+$ pip install git+git://github.com/20326/scrapy-selenium.git
 ```
 You should use **python>=3.6**. 
 You will also need one of the Selenium [compatible browsers](http://www.seleniumhq.org/about/platforms.jsp).
@@ -18,6 +19,18 @@ You will also need one of the Selenium [compatible browsers](http://www.selenium
     SELENIUM_DRIVER_NAME = 'firefox'
     SELENIUM_DRIVER_EXECUTABLE_PATH = which('geckodriver')
     SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
+    # desired_capabilities - Dictionary object with non-browser specific capabilities only, such as "proxy" or "loggingPref".
+    SELENIUM_DRIVER_DESIRED_CAPABILITIES = {
+        "loggingPrefs": {
+          "performance": "ALL"
+        },
+        "prefs": {
+          "profile.managed_default_content_settings.images": 2,
+          "profile.managed_default_content_settings.stylesheet": 2
+        }
+    }
+    SELENIUM_DRIVER_USE_WIRE = True
+    SELENIUM_DRIVER_WIRE_OPTIONS = {'verify_ssl': False}
     ```
 
 Optionally, set the path to the browser executable:
